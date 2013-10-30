@@ -54,9 +54,11 @@ exports.createCategory = function(req, res) {
 exports.updateCategory = function(req, res) {
     var id = req.params.id,
         category = req.body;
-    db.collection('categories', function(err, collection){
+        delete( category._id );
+    db.collection('categories', function(err, collection){ 
         collection.update({'_id' : new BSON.ObjectID(id)}, category, {safe:true}, function(err, result) {
             if(err) {
+
                 res.send('error on PUT');
             } else {
                 res.send(category);
