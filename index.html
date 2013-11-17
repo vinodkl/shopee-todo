@@ -1,0 +1,114 @@
+<?php
+  header('Access-Control-Allow-Origin: *');
+?>
+<!DOCTYPE html> 
+<html lang="en"> 
+  <head> 
+    <meta charset="utf-8"> 
+    <title>Shopbone</title> 
+    <meta name="description" content=""> 
+    <meta name="author" content=""> 
+
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="screen" /> 
+
+    <script src="js/vendor/jquery-1.7.2.min.js"></script> 
+    <script src="js/vendor/underscore.min.js"></script> 
+    <script src="js/vendor/bootstrap.min.js"></script> 
+    <script src="js/vendor/backbone.min.js"></script> 
+
+    <script type="text/javascript">
+      var hostName = "http://192.168.1.29:4080";
+    </script>
+    <!-- models: -->
+    <script src="js/models/category.js"></script>
+    <script src="js/models/shopitems.js"></script>
+
+    <!-- views: -->
+    <script src="js/views/category-view.js"></script>
+    <script src="js/views/shopitem-view.js"></script>
+
+    <!-- add template -->
+    <script type="text/template" id="category_view">
+
+      <div class="modal-header">
+        <button class="close">X</button>
+        <h1>Manage Categories</h1>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="control-group">
+            <label>New Category</label>
+            <input type="text" class="category_name"></input>
+            <button class="category_add btn btn-primary">Add</button>
+          </div>
+          <ul class="categories span3">
+            
+          </ul>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn">Close</a>
+      </div>
+
+    </script>
+
+    <script type="text/template" id="shopitemView">
+    <td>
+      <div class="btn-group">
+        <a href="#" class="delete btn btn-danger">X</a>
+        <a href="#" class="purchase btn"><i class="icon-star-empty"></i></a>
+        <a href="#" class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
+          <%= (model.get('category') && model.get('category').get('name').length >0) ?
+            model.get('category').get('name') : 'no category' %>
+        </a>
+      </div>
+    </td>
+    <td>
+      <p><%= model.get('name') %></p>
+    </td>
+    </script>
+  </head> 
+ 
+  <body>
+  	<div class="navbar navbar-fixed-top"> 
+        <div class="navbar-inner">
+        <div class="offset1"> <a class="brand" href="#">Shopbone</a></div>
+  	    <div class="container"> 
+  	      <ul class="nav"> 
+  	        <li class="home active"><a class="active" href="#">Home</a></li> 
+          </ul>
+        </div>  
+  	  </div> 
+  	</div>
+  	<div class="container ">
+        <section class="row span6" style="margin-top: 40px;">
+            <div id="app">
+              <table class="table table-striped">
+                <tbody class="shoppinglist">
+
+                </tbody>
+              </table>
+            </div>
+            <div id="categorymodal" class="modal fade hide"></div>
+        </section>
+    </div>
+
+    <script type="text/javascript">
+    (function() {
+      window.categories = new CategoryCollection();
+      window.categoryView = new CategoryView({collection: window.categories});
+
+      $("#categorymodal").html(window.categoryView.render().el);
+
+      window.shoppinglist = new ShoppingList();
+      shoppinglist.bind('all', function(){
+        $('.shoppinglist').empty();
+        shoppinglist.each(function(shopItem) {
+          var view = new ShopItemView({model:shopItem});
+          $('.shoppinglist').append(view.render().el);
+        }, this);
+      });
+    })();
+    </script>
+  </body> 
+</html
