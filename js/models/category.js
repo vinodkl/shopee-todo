@@ -1,4 +1,4 @@
-var hostName = "http://localhost:4080";
+
 window.Category = Backbone.Model.extend({
 	idAttribute: "_id",
 	url : function() {

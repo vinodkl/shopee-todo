@@ -81,6 +81,68 @@ exports.deleteCategory = function(req, res) {
     });
 }
 
+exports.addShopItem = function(req, res) {
+    var shopitem = req.body;
+    db.collection('shop_items', function(err, collection) {
+        collection.insert(shopitem, {safe:true}, function(err, result){
+            if(err) {
+                res.send({error: 'insert new shopitem error'});
+            } else {
+                console.log('Success: '+ result[0]);
+                res.send(result[0]);
+            }
+        });
+    });
+}
+
+exports.getAllShopItems = function(req, res) {
+    db.collection('shop_items', function(err, collection) {
+        collection.find().toArray(function(err, item) {
+            res.send(item);
+        });
+    });
+}
+
+exports.getShopItem = function(req, res) {
+    //res.send({name: 'here '+req.params.id});  
+    var id =req.params.id;
+    console.log('retrived shopitem ' + id);
+    db.collection('shop_items', function(err, collection) {
+        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, item) {
+            res.send(item);
+        });
+    });
+}
+
+exports.updateShopitem = function(req, res) {
+    var id = req.params.id,
+        shopitem = req.body;
+        delete( shopitem._id );
+    db.collection('shop_items', function(err, collection){ 
+        collection.update({'_id' : new BSON.ObjectID(id)}, shopitem, {safe:true}, function(err, result) {
+            if(err) {
+                res.send('error on PUT');
+            } else {
+                res.send(shopitem);
+            }
+        })
+    });
+}
+
+exports.deleteShopitem = function(req, res) {
+    var id = req.params.id;
+
+    db.collection('shop_items', function(err, collection){
+        collection.remove({'_id' : new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
+            if(err) {
+                res.send('error on DELETE');
+            } else {
+                res.send('delete successfull');
+            }
+        })
+    });
+}
+
 var populateDB = function() {
  
     var cat = [

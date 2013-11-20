@@ -29,6 +29,12 @@ app.get('/category/:id', routes.getCategoryById);
 app.put('/category/:id', routes.updateCategory);
 app.delete('/category/:id', routes.deleteCategory);
 
+app.get('/shopitems', routes.getAllShopItems);
+app.post('/shopitems', routes.addShopItem);
+app.get('/shopitem/:id', routes.getShopItem);
+app.put('/shopitem/:id', routes.updateShopitem);
+app.delete('/shopitem/:id', routes.deleteShopitem);
+
 //app.get('/', routes.)
 
 app.listen(4080);

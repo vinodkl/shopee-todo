@@ -26,10 +26,22 @@
     <!-- views: -->
     <script src="js/views/category-view.js"></script>
     <script src="js/views/shopitem-view.js"></script>
+    <script src="js/views/shopping-view.js"></script>
 
     <!-- add template -->
-    <script type="text/template" id="category_view">
+    <script type="text/template" id="shoppingView">
+      <div class="well">
+        <textarea rows="6" class="listbox"></textarea>
+        <button class="addtolist btn btn-primary">Add to list</button>
+      </div>
+      <table class="table table-striped">
+        <tbody class="shoppinglist">
 
+        </tbody>
+      </table>
+    </script>
+
+    <script type="text/template" id="category_view">
       <div class="modal-header">
         <button class="close">X</button>
         <h1>Manage Categories</h1>
@@ -58,9 +70,15 @@
         <a href="#" class="delete btn btn-danger">X</a>
         <a href="#" class="purchase btn"><i class="icon-star-empty"></i></a>
         <a href="#" class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
-          <%= (model.get('category') && model.get('category').get('name').length >0) ?
-            model.get('category').get('name') : 'no category' %>
+          <%= (model.get('category') && model.get('category').get('name').length >0) ? model.get('category').get('name') : 'no category' %> 
         </a>
+        <ul class="dropdown-menu">
+          <% if (categories != undefined) { %> 
+            <% categories.each(function(c){ %>
+              <li><a href="#" data-id="<%= c.get('_id') %>"><%= c.get('name') %></a></li>
+            <% }, this); %>
+          <% } %>
+        </ul>
       </div>
     </td>
     <td>
@@ -83,11 +101,7 @@
   	<div class="container ">
         <section class="row span6" style="margin-top: 40px;">
             <div id="app">
-              <table class="table table-striped">
-                <tbody class="shoppinglist">
-
-                </tbody>
-              </table>
+              
             </div>
             <div id="categorymodal" class="modal fade hide"></div>
         </section>
@@ -100,14 +114,9 @@
 
       $("#categorymodal").html(window.categoryView.render().el);
 
-      window.shoppinglist = new ShoppingList();
-      shoppinglist.bind('all', function(){
-        $('.shoppinglist').empty();
-        shoppinglist.each(function(shopItem) {
-          var view = new ShopItemView({model:shopItem});
-          $('.shoppinglist').append(view.render().el);
-        }, this);
-      });
+      var shoppingView = new ShoppingView({categories: window.categories});
+      $("#app").html(shoppingView.el);
+
     })();
     </script>
   </body> 

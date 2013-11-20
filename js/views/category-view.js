@@ -2,13 +2,21 @@ window.CategoryView = Backbone.View.extend({
 	template: "#category_view",
 	events: {
 		'click .delete': 'removeCategory',
-		'click .category_add': 'addCategory'
+		'click .category_add': 'addCategory',
+		'click .modal-footer .btn': 'hide',
+		'click .modal-header .close': 'hide',
 	},
 	collection: new CategoryCollection(),
 	initialize: function() {
 		_.bindAll(this, 'render', 'removeCategory');
 		this.collection.fetch();
 		this.collection.bind('all', this.render);
+	},
+	show: function() {
+		$($(this.el).parents('.modal')).modal();
+	},
+	hide: function() {
+		$($(this.el).parents('.modal')).modal('hide');
 	},
 	addCategory: function(e) {
 		e.preventDefault();
